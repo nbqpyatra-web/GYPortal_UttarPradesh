@@ -331,8 +331,9 @@ denominator is canonical is open gating decision #1 above.
 
 ## 15. Monitoring portal (`portal/`)
 - **Working repo (from 2 Nov 2026): `nbqpyatra-web/GYPortal_UttarPradesh`, deployed on Vercel.**
-  Make all changes here, not in the older `nbqpyatra-web/UP-GY` repo. Push straight to
-  `main` (decided by Rachit, 2 Nov 2026): every push to main redeploys the live Vercel site,
+  Make all changes here, not in the older `nbqpyatra-web/UP-GY` repo. NEVER create
+  branches (no feature, claude/ or PR branches): commit and push straight to `main`
+  (decided by Rachit, 2 Nov 2026): every push to main redeploys the live Vercel site,
   so check each change locally (render the page, no console errors, phone width) first.
 - On Vercel the page is a plain static site: the shared Readiness tracker and team-member
   editing only save on the claude.ai artifact link below; on Vercel they show read-only.
