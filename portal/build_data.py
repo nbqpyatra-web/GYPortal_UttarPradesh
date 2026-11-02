@@ -397,13 +397,16 @@ def main():
         sys.exit(f"Route plan districts do not match the 75 districts: "
                  f"missing {sorted(set(districts) - set(covered))}, "
                  f"unknown {sorted(set(covered) - set(districts))}")
+    pulled = None
     if "--no-crm" in sys.argv:
         events = []
     elif "--cached" in sys.argv:
         with open(CACHE) as f:
             events = json.load(f)
+        pulled = dt.datetime.fromtimestamp(os.path.getmtime(CACHE), IST)
     else:
         events = crm_events()
+        pulled = dt.datetime.now(IST)
         os.makedirs(os.path.dirname(CACHE), exist_ok=True)
         with open(CACHE, "w") as f:
             json.dump(events, f)
@@ -414,7 +417,7 @@ def main():
         feat["properties"] = {"name": canon(feat["properties"]["dtname"])}
     missing = sorted(set(districts) - {f["properties"]["name"] for f in geo["features"]})
     payload = {
-        "generatedAt": dt.datetime.now(IST).isoformat(timespec="minutes"),
+        "generatedAt": (pulled or dt.datetime.now(IST)).isoformat(timespec="minutes"),  # CRM pull time
         "today": ist_today().isoformat(),
         "crmLive": bool(events),
         "programmeStart": PROGRAMME_START,
