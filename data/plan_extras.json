@@ -1,0 +1,376 @@
+{
+ "holidays": [
+  {
+   "date": "2026-10-02",
+   "day": "Friday",
+   "name": "Mahatma Gandhi Jayanti",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Before launch"
+  },
+  {
+   "date": "2026-10-19",
+   "day": "Monday",
+   "name": "Maha Navami",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Before the 4 Nov launch"
+  },
+  {
+   "date": "2026-10-20",
+   "day": "Tuesday",
+   "name": "Dussehra / Vijayadashami",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Before the 4 Nov launch"
+  },
+  {
+   "date": "2026-10-26",
+   "day": "Monday",
+   "name": "Maharishi Valmiki Jayanti",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": null
+  },
+  {
+   "date": "2026-10-29",
+   "day": "Thursday",
+   "name": "Karva Chauth",
+   "type": "Restricted",
+   "blocks": "Caution",
+   "note": null
+  },
+  {
+   "date": "2026-10-31",
+   "day": "Saturday",
+   "name": "Sardar Patel / Acharya Narendra Dev Jayanti",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Saturday"
+  },
+  {
+   "date": "2026-11-06",
+   "day": "Friday",
+   "name": "Dhanteras (Diwali week)",
+   "type": "Major festival (not gazetted)",
+   "blocks": "Yes",
+   "note": "Practical block – hospital owners & CMO staff busy"
+  },
+  {
+   "date": "2026-11-07",
+   "day": "Saturday",
+   "name": "Choti Diwali / Narak Chaturdashi",
+   "type": "Observance",
+   "blocks": "Yes",
+   "note": "Blocks Saturday shift for 6 Nov"
+  },
+  {
+   "date": "2026-11-08",
+   "day": "Sunday",
+   "name": "Deepawali",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Sunday"
+  },
+  {
+   "date": "2026-11-09",
+   "day": "Monday",
+   "name": "Govardhan Puja",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Some lists show 10 Nov"
+  },
+  {
+   "date": "2026-11-11",
+   "day": "Wednesday",
+   "name": "Bhai Dooj / Chitragupta Jayanti",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Wednesday → no yatra on 13 Nov except Moradabad (Team 2's first, already mobilised)"
+  },
+  {
+   "date": "2026-11-15",
+   "day": "Sunday",
+   "name": "Chhath Puja (evening arghya)",
+   "type": "Restricted",
+   "blocks": "Caution",
+   "note": "Heavy in East UP – Team 1 starts at Gorakhpur on 20 Nov; finish phone mobilisation before Chhath"
+  },
+  {
+   "date": "2026-11-16",
+   "day": "Monday",
+   "name": "Chhath Puja (morning arghya)",
+   "type": "Observance",
+   "blocks": "Caution",
+   "note": "East UP staff return mid-week before the 20 Nov Gorakhpur yatra"
+  },
+  {
+   "date": "2026-11-24",
+   "day": "Tuesday",
+   "name": "Guru Nanak Jayanti / Kartik Purnima",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Tuesday – no clash"
+  },
+  {
+   "date": "2026-12-23",
+   "day": "Wednesday",
+   "name": "Chaudhary Charan Singh Jayanti / Hazrat Ali Jayanti",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Wednesday → 25 Dec week skipped"
+  },
+  {
+   "date": "2026-12-24",
+   "day": "Thursday",
+   "name": "Christmas Eve",
+   "type": "Restricted",
+   "blocks": "Caution",
+   "note": null
+  },
+  {
+   "date": "2026-12-25",
+   "day": "Friday",
+   "name": "Christmas",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Friday"
+  },
+  {
+   "date": "2027-01-01",
+   "day": "Friday",
+   "name": "New Year's Day",
+   "type": "Restricted",
+   "blocks": "Caution",
+   "note": "Inside the 19 Dec – 4 Jan no-yatra window (NABH faculty leave)"
+  },
+  {
+   "date": "2027-01-14",
+   "day": "Thursday",
+   "name": "Makar Sankranti / Khichdi",
+   "type": "Restricted",
+   "blocks": "Caution",
+   "note": "Thursday → no yatra on 15 Jan"
+  },
+  {
+   "date": "2027-01-26",
+   "day": "Tuesday",
+   "name": "Republic Day",
+   "type": "National",
+   "blocks": "Yes",
+   "note": "Tuesday – no clash"
+  },
+  {
+   "date": "2027-02-11",
+   "day": "Thursday",
+   "name": "Basant Panchami (approx.)",
+   "type": "Restricted",
+   "blocks": "Caution",
+   "note": "Thursday before the 12 Feb yatras – push registrations early"
+  },
+  {
+   "date": "2027-02-20",
+   "day": "Saturday",
+   "name": "Sant Ravidas Jayanti / Magh Purnima (approx.)",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Saturday"
+  },
+  {
+   "date": "2027-03-06",
+   "day": "Saturday",
+   "name": "Maha Shivratri (approx.)",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Saturday"
+  },
+  {
+   "date": "2027-03-09",
+   "day": "Tuesday",
+   "name": "Eid-ul-Fitr (approx., moon-dependent)",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "No yatra on 12 Mar in the plan"
+  },
+  {
+   "date": "2027-03-21",
+   "day": "Sunday",
+   "name": "Holika Dahan",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Sunday"
+  },
+  {
+   "date": "2027-03-22",
+   "day": "Monday",
+   "name": "Holi",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Monday"
+  },
+  {
+   "date": "2027-03-26",
+   "day": "Friday",
+   "name": "Good Friday",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Friday → yatras on Saturday 27 Mar"
+  },
+  {
+   "date": "2027-04-14",
+   "day": "Wednesday",
+   "name": "Dr. B.R. Ambedkar Jayanti",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": "Wednesday → no yatra on 16 Apr"
+  },
+  {
+   "date": "2027-04-15",
+   "day": "Thursday",
+   "name": "Ram Navami (approx.)",
+   "type": "Gazetted",
+   "blocks": "Yes",
+   "note": null
+  }
+ ],
+ "rhythm": [
+  {
+   "when": "T-30 (month before the yatra)",
+   "activity": "Send QCI letter (citing SACHIS Circular 161) to the CMOs of the next month's districts; request hospital list + SPOC",
+   "output": "Letters dispatched for next month's districts",
+   "with": "CMO offices"
+  },
+  {
+   "when": "T-15",
+   "activity": "Pre-build target list: PM-JAY empanelled hospitals minus NABH-certified; ask CMO only to validate",
+   "output": "District target list ready",
+   "with": "Analyst / CMO"
+  },
+  {
+   "when": "T-10",
+   "activity": "Venue confirmed by CMO – else trigger QCI Procurement; decide Refreshment & AV owner",
+   "output": "Venue + AV locked",
+   "with": "CMO / QCI Procurement"
+  },
+  {
+   "when": "T-7",
+   "activity": "Confirm NABH faculty for the date (a different faculty member for each parallel yatra)",
+   "output": "Faculty confirmed",
+   "with": "NABH coordinator"
+  },
+  {
+   "when": "Monday",
+   "activity": "Reach district; meet CMO / Dy. CMO; confirm SPOC; collect & validate hospital list",
+   "output": "SPOC named, list validated",
+   "with": "CMO office"
+  },
+  {
+   "when": "Tuesday",
+   "activity": "CMO invitation circulated; CRM registration link shared; calls to top 60 non-NABH hospitals",
+   "output": "Registrations started",
+   "with": "SPOC"
+  },
+  {
+   "when": "Wednesday",
+   "activity": "Visit key hospitals / IMA branch; venue walk-through; refreshment & AV order confirmed",
+   "output": "≥25 registrations",
+   "with": "SPOC / vendor"
+  },
+  {
+   "when": "Thursday",
+   "activity": "Reminder calls & WhatsApp; print material, standees, feedback forms; faculty travel check",
+   "output": "≥40 registrations; faculty en route",
+   "with": "SPOC / faculty"
+  },
+  {
+   "when": "Friday 4–8 PM",
+   "activity": "YATRA – Registration, QCI intro, NABH technical session, Q&A, Pledge, Vote of thanks, Group photo",
+   "output": "Attendance + feedback captured",
+   "with": "NABH faculty"
+  },
+  {
+   "when": "Saturday",
+   "activity": "Update CRM: Hot / Warm / Cold; send thank-you + next steps; travel to next district",
+   "output": "CRM updated within 24 hrs",
+   "with": "Team member"
+  },
+  {
+   "when": "Sunday",
+   "activity": "Rest / travel",
+   "output": "—",
+   "with": "—"
+  }
+ ],
+ "risks": [
+  {
+   "item": "Launch and first-yatra lead time",
+   "detail": "The Lucknow launch is on Wed 4 Nov and Team 2's Moradabad yatra on Fri 13 Nov, in Bhai Dooj week. Lock the Lucknow venue and faculty now; Moradabad registrations are already open in the CRM.",
+   "level": "High"
+  },
+  {
+   "item": "Holiday data",
+   "detail": "2026 dates come from published UP holiday lists; the 2027 UP list is not yet notified, so 2027 dates are indicative. Update once GAD notifies (usually December).",
+   "level": "Medium"
+  },
+  {
+   "item": "Chhath",
+   "detail": "Team 1 starts at Gorakhpur on 20 Nov, right after Chhath (15–16 Nov), which is heavy in East UP. Reach Gorakhpur by Tue 17 Nov and finish phone mobilisation before the festival.",
+   "level": "Medium"
+  },
+  {
+   "item": "Year-end break",
+   "detail": "No yatras from 19 Dec 2026 to 4 Jan 2027 while NABH faculty are on New Year leave. Send January CMO letters and lock January faculty before 18 Dec.",
+   "level": "High"
+  },
+  {
+   "item": "Eid-ul-Fitr",
+   "detail": "Expected around 9 Mar 2027 (moon-dependent). The plan has no yatra on 12 Mar, so only the 5 Mar and 19 Mar yatras could be affected; confirm once the date is fixed.",
+   "level": "Low"
+  },
+  {
+   "item": "UP Assembly election 2027",
+   "detail": "Likely Feb–Mar 2027. Once the Model Code of Conduct applies, CMO and DM staff go on poll duty and government halls get requisitioned. Book QCI-procured venues for Feb–Apr, invite no political guests, and avoid each district's poll date by three days either side.",
+   "level": "High"
+  },
+  {
+   "item": "Fog and timing",
+   "detail": "Dense fog from Dec to Feb: an 8 PM finish means night highway driving. Consider 2–6 PM sessions in that period, or an overnight stay.",
+   "level": "Medium"
+  },
+  {
+   "item": "Cluster yatras",
+   "detail": "14 cluster yatras combine 2–4 districts at one host venue. Ask the CMOs of all cluster districts to mobilise, not only the host, and consider 12–4 PM so hospitals can travel back.",
+   "level": "Medium"
+  },
+  {
+   "item": "Team leads",
+   "detail": "Team 1 is led by Pankaj; the Team 2 and Team 3 leads are still to be named, and each team has one coordinator. Name the leads before Team 2's 13 Nov and Team 3's 20 Nov yatras, and keep one standby person who can step into any team.",
+   "level": "High"
+  },
+  {
+   "item": "NABH faculty",
+   "detail": "Up to 3 yatras run in parallel on most Fridays, so 3 different faculty members are needed. Keep a pool of 4–5, block dates month by month and confirm at T-7.",
+   "level": "High"
+  },
+  {
+   "item": "Distances",
+   "detail": "Kilometres shown in the portal are rough road estimates between district headquarters (straight-line distance plus 25%), for planning only. Verify before booking travel.",
+   "level": "Low"
+  },
+  {
+   "item": "Gunvatta Manthan",
+   "detail": "Yatras now run to 30 Apr 2027. Plan the state-level Gunvatta Manthan and certification ceremony for May 2027.",
+   "level": "Medium"
+  }
+ ],
+ "rules": [
+  "Grand launch in Lucknow on Wednesday 4 Nov 2026, with all three teams together.",
+  "Team 2 (West UP) starts at Moradabad on Friday 13 Nov; Team 1 (East UP) starts at Gorakhpur and Team 3 (Central UP and Bundelkhand) at Kanpur Nagar on 20 Nov.",
+  "Every yatra is on a Friday, 4 PM to 8 PM; when the Friday is a UP holiday it moves to Saturday (Good Friday, 26 Mar 2027, becomes Saturday 27 Mar).",
+  "No yatras from 19 Dec 2026 to 4 Jan 2027 while NABH faculty are on New Year leave; January CMO letters and faculty are locked before 18 Dec.",
+  "Each team has one lead and one coordinator: Team 1 led by Pankaj, Team 2 and Team 3 leads to be named.",
+  "56 yatras in all (the launch plus 18, 18 and 19 per team) cover all 75 districts; 14 of them are cluster yatras that bring 2–4 neighbouring districts to one host venue.",
+  "30 Apr 2027 is a buffer date for Teams 1 and 2 for any yatra that slips; Team 3 holds its last yatra (Fatehpur) that day.",
+  "Up to three yatras run on the same Friday, so up to three NABH faculty are needed per Friday."
+ ]
+}

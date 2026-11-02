@@ -34,14 +34,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "freshworks_mcp"))
 import server as fw  # noqa: E402
 
-ROUTE_PLAN = os.path.join(ROOT, "data", "Gunvatta_Yatra_UP_Route_Plan.xlsx")
+ROUTE_PLAN = os.path.join(ROOT, "data", "Gunvatta_Yatra_UP_3Team_Plan.xlsx")
+EXTRAS = os.path.join(ROOT, "data", "plan_extras.json")  # holidays, weekly rhythm, risks, plan rules
 PLANNER = os.path.join(ROOT, "data", "Planned_Yatras_All_Phases.xlsx")  # hospital figures only
 GEOJSON = os.path.join(ROOT, "portal", "up_districts.geojson")
 INDEX = os.path.join(ROOT, "portal", "index.html")
 CACHE = os.path.join(ROOT, "portal", ".cache", "crm_events.json")
 
 CIRCULAR_DATE = "2026-05-15"
-PROGRAMME_START = "2026-10-23"   # UP GY launch (Lucknow, joint); earlier events are history
+PROGRAMME_START = "2026-11-04"   # UP GY grand launch (Lucknow, all teams); earlier events are history
 MATCH_DAYS = 3                   # a CRM event within this many days of the plan date matches
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
 
@@ -138,66 +139,156 @@ def load_districts():
     return districts
 
 
-TEAM_KEYS = {"Joint (All 4)": "J", "Team 1 – West": "T1", "Team 2 – East": "T2",
-             "Team 3 – Central": "T3", "Team 4 – South-West & Bundelkhand": "T4"}
-
-
 def blank(v):
     return None if v in (None, "", "—", "-") else v
 
 
-def load_route():
+HOST_RE = re.compile(r"\((?:host|venue):\s*([^)]+)\)")
+
+
+def parse_place(text):
+    """'Basti + Sant Kabir Nagar (host: Basti)' -> (districts, host venue town or None)."""
+    m = HOST_RE.search(text)
+    venue = m.group(1).strip() if m else None
+    core = HOST_RE.sub("", text)
+    alias = re.search(r"\(([^)]+)\)", core)          # 'Gautam Buddha Nagar (Noida)'
+    if alias:
+        venue = venue or alias.group(1).strip()
+        core = core[:alias.start()]
+    core = core.split("—")[0]
+    return [canon(d) for d in core.split("+")], venue
+
+
+def centroids():
+    with open(GEOJSON) as f:
+        geo = json.load(f)
+    out = {}
+    for feat in geo["features"]:
+        g = feat["geometry"]
+        rings = g["coordinates"] if g["type"] == "Polygon" else [p[0] for p in g["coordinates"]]
+        pts = [pt for ring in rings for pt in ring]
+        out[canon(feat["properties"]["dtname"])] = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
+    return out
+
+
+def road_km(a, b):
+    """Rough road distance between district centres: great-circle distance plus 25%, to 5 km."""
+    import math
+    (lon1, lat1), (lon2, lat2) = a, b
+    p1, p2, dl = math.radians(lat1), math.radians(lat2), math.radians(lon2 - lon1)
+    d = 2 * 6371 * math.asin(math.sqrt(math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2))
+    return int(round(d * 1.25 / 5) * 5)
+
+
+TEAM_RE = re.compile(r"^TEAM (\d) \(Team ([A-Z])\) — (.+?)\s+·\s+Lead:\s*(.+?)\s+·\s+Support:\s*(.+)$")
+
+
+def load_route(districts):
+    """The 3-team plan (one sheet, a block per team) plus the maintained extras file."""
     wb = openpyxl.load_workbook(ROUTE_PLAN, data_only=True)
-    yatras, reserves = [], []
-    for r in sheet_rows(wb["Route Plan"], "S.No"):
-        if not isinstance(r["S.No"], int):
+    ws = wb.worksheets[0]
+    with open(EXTRAS) as f:
+        extras = json.load(f)
+    holidays = extras["holidays"]
+    cent = centroids()
+    yatras, reserves, teams, team = [], [], [], None
+    for r in ws.iter_rows(values_only=True):
+        a, date, day, place, mandal = (r + (None,) * 6)[:5]
+        if isinstance(a, str) and a.startswith("TEAM "):
+            m = TEAM_RE.match(a.strip())
+            if not m:
+                sys.exit(f"Unrecognised team header: {a!r}")
+            lead = m.group(4).strip()
+            zone = re.sub(r"\bUp\b", "UP", m.group(3).strip().title())   # 'EAST UP' -> 'East UP'
+            team = {"key": f"T{m.group(1)}", "letter": m.group(2), "zone": zone,
+                    "name": f"Team {m.group(1)}, {zone}",
+                    "member": None if "TBD" in lead else lead, "leadNote": lead,
+                    "support": m.group(5).strip(), "base": None}
+            teams.append(team)
             continue
-        team = TEAM_KEYS[r["Team"]]
-        leg = r["Leg"]
-        base = {
-            "id": leg if team == "J" else f"{team}-{leg}", "sno": r["S.No"], "team": team, "teamName": r["Team"],
-            "teamZone": r["Zone"], "circuit": r["Phase / Circuit"], "leg": leg,
-            "date": r["Yatra Date"], "day": r["Day"], "onGround": r["Team on ground by"],
-            "calendar": r["Calendar check"], "remarks": blank(r["Remarks"]),
-        }
-        if r["Status"] == "Reserve":
-            reserves.append(base)
+        if not hasattr(date, "date"):
             continue
-        base.update({
-            "mandal": r["Mandal"], "host": canon(r["District / Cluster (Host)"].replace(" Cluster", "")),
-            "label": r["District / Cluster (Host)"],
-            "districts": [canon(d) for d in str(r["Districts covered"]).split(",")],
-            "travelFrom": blank(r["Travel from"]), "km": blank(r["Approx. road km"]),
-            "earlier": blank(r["Earlier GY visit"]), "venue": blank(r["Venue (Primary)"]),
-            "fallback": blank(r["Fallback"]), "refreshAV": blank(r["Refreshment & AV"]),
-            "faculty": blank(r["NABH Faculty"]), "spoc": blank(r["District SPOC (CMO office)"]),
-            "turnout": blank(r["Turnout target"]), "planStatus": r["Status"],
+        date = iso(date)
+        if isinstance(place, str) and place.startswith("BUFFER"):
+            reserves.append({"id": f"{team['key']}-R", "team": team["key"], "teamName": team["name"],
+                             "leg": "Buffer", "date": date, "day": day, "remarks": place.split("—", 1)[-1].strip().capitalize(),
+                             "calendar": "YATRA DAY", "onGround": None})
+            continue
+        dists, venue = parse_place(place)
+        if a == "L":
+            key, leg, name = "J", "Launch", "Grand launch, all teams"
+            venue = None
+        else:
+            key, leg, name = team["key"], f"{int(a):02d}", team["name"]
+        yatras.append({
+            "id": "L" if key == "J" else f"{key}-{leg}", "sno": a, "team": key, "teamName": name,
+            "teamZone": None if key == "J" else team["zone"], "leg": leg, "date": date, "day": day,
+            "mandal": mandal, "label": place, "districts": dists, "host": dists[0],
+            "cluster": place if len(dists) > 1 else None, "venueTown": venue,
+            "remarks": "State-level grand launch, all three teams together" if key == "J" else None,
         })
-        base["cluster"] = r["District / Cluster (Host)"] if len(base["districts"]) > 1 else None
-        yatras.append(base)
+    # Derived planning fields: team on the ground, calendar caution, travel, earlier visits.
+    hol = {h["date"]: h for h in holidays}
+    by_team = {}
+    for y in sorted(yatras, key=lambda y: y["date"]):
+        d = dt.date.fromisoformat(y["date"])
+        y["onGround"] = (d - dt.timedelta(days=d.weekday())).isoformat()   # Monday of yatra week
+        if y["day"] == "Saturday":
+            y["calendar"] = "SATURDAY (Fri holiday)"
+        elif any(hol.get((d - dt.timedelta(days=k)).isoformat()) for k in (0, 1, 2)):
+            y["calendar"] = "YATRA DAY – CAUTION"
+        else:
+            y["calendar"] = "YATRA DAY"
+        prev = by_team.get(y["team"]) or ("Lucknow" if y["team"] != "J" else None)
+        if prev and prev != y["host"]:
+            y["travelFrom"], y["km"] = prev, road_km(cent[prev], cent[y["host"]])
+        else:
+            y["travelFrom"], y["km"] = ("Team base", None) if y["team"] == "J" else (prev, None)
+        by_team[y["team"]] = y["host"]
+        b = [districts[x]["baseline"] for x in y["districts"] if districts.get(x, {}).get("baseline", {}).get("yatras")]
+        if b:
+            att, n = sum(x["attended"] for x in b), sum(x["yatras"] for x in b)
+            bits = [f"{sum(x[k] for x in b)} {lbl}" for k, lbl in (("won", "Won"), ("hot", "Hot"), ("warm", "Warm")) if sum(x[k] for x in b)]
+            head = f"{att} attended" if att else f"{n} earlier yatra{'s' if n > 1 else ''}, attendance not recorded"
+            y["earlier"] = f"Yes – {head}" + (f" ({', '.join(bits)})" if bits else "") + ". Run as follow-up"
+        else:
+            y["earlier"] = None
+        y["venue"] = f"CMO Office{', ' + y['venueTown'] if y['venueTown'] else ''}"
+        y["fallback"], y["refreshAV"] = "QCI Procurement", "CMO / QCI – to be locked"
+        y["faculty"], y["spoc"] = None, None
+        y["turnout"] = "80–100 hospitals" if y["cluster"] else "40–50 hospitals"
+        y["planStatus"] = "Planned"
+        y["circuit"] = dt.date.fromisoformat(y["date"]).strftime("%b %Y")
+    yatras.sort(key=lambda y: (y["date"], y["team"]))
 
-    teams = []
-    for r in sheet_rows(wb["Summary"], "Team"):
-        if r["Team"] in TEAM_KEYS:
-            teams.append({"key": TEAM_KEYS[r["Team"]], "name": r["Team"], "zone": r["Zone"],
-                          "member": blank(r["Team member (1 person)"]), "base": blank(r["Home base"])})
-        if r["Team"] == "TOTAL":
-            break
-
-    holidays = [{"date": r["Date"], "day": r["Day"], "name": r["Holiday / Festival"],
-                 "type": r["Type"], "blocks": r["Blocks Yatra?"], "note": blank(r["Note"])}
-                for r in sheet_rows(wb["UP Holidays"], "Date")]
-    fridays = [{"friday": r["Friday"], "status": r["FINAL STATUS"], "date": r["Yatra date to use"],
-                "count": r["Yatras scheduled"], "override": blank(r["Planning override"])}
-               for r in sheet_rows(wb["Friday Calendar"], "Friday") if r["Friday"] != "TOTAL"]
-    rhythm = [{"when": r["When"], "activity": r["Activity"], "output": r["Output / check"], "with": r["With"]}
-              for r in sheet_rows(wb["Weekly Rhythm"], "When")]
-    risks = [{"no": r["#"], "item": r["Item"], "detail": r["Detail / Action"], "level": r["Level"]}
-             for r in sheet_rows(wb["Notes & Risks"], "#")]
-    rules = [str(r[0]) for r in wb["Summary"].iter_rows(values_only=True)
-             if r[0] and re.match(r"^\d+\. ", str(r[0]))]
+    # Friday calendar: every Friday from the launch week to the last yatra.
+    used = {}
+    for y in yatras + reserves:
+        d = dt.date.fromisoformat(y["date"])
+        fri = d - dt.timedelta(days=(d.weekday() - 4) % 7)
+        used.setdefault(fri.isoformat(), []).append(y)
+    first = dt.date.fromisoformat(min(y["date"] for y in yatras))
+    last = dt.date.fromisoformat(max(y["date"] for y in yatras + reserves))
+    fri = first + dt.timedelta(days=(4 - first.weekday()) % 7)
+    fridays = []
+    while fri <= last + dt.timedelta(days=1):
+        ys = [y for y in used.get(fri.isoformat(), []) if y in yatras]
+        rs = [y for y in used.get(fri.isoformat(), []) if y in reserves]
+        dates = sorted({y["date"] for y in ys + rs})
+        if ys:
+            status = "SATURDAY (Fri holiday)" if any(y["day"] == "Saturday" for y in ys) else (
+                "YATRA DAY – CAUTION" if any(y["calendar"].endswith("CAUTION") for y in ys) else "YATRA DAY")
+        elif rs:
+            status = "BUFFER"
+        elif dt.date(2026, 12, 19) <= fri <= dt.date(2027, 1, 4):
+            status = "SKIP – year-end break (19 Dec–4 Jan)"
+        else:
+            status = "SKIP – no yatra planned"
+        fridays.append({"friday": fri.isoformat(), "status": status, "date": dates[0] if dates else None,
+                        "count": len(ys), "override": "Year-end break" if "year-end" in status else None})
+        fri += dt.timedelta(days=7)
     return {"yatras": yatras, "reserves": reserves, "teams": teams, "holidays": holidays,
-            "fridays": fridays, "rhythm": rhythm, "risks": risks, "rules": rules}
+            "fridays": fridays, "rhythm": extras["rhythm"], "risks": extras["risks"], "rules": extras["rules"]}
 
 
 # --------------------------------------------------------------------------- CRM
@@ -391,7 +482,7 @@ def write_index(payload):
 def main():
     fw.load_env_file()
     districts = load_districts()
-    route = load_route()
+    route = load_route(districts)
     covered = [d for y in route["yatras"] for d in y["districts"]]
     if sorted(set(covered)) != sorted(districts) or len(covered) != len(set(covered)):
         sys.exit(f"Route plan districts do not match the 75 districts: "

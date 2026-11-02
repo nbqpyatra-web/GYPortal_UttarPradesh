@@ -129,7 +129,23 @@ PM-JAY count — potential is floored at 0.
 
 ## 6. Schedule
 
-### CURRENT: 4-team route plan — `data/Gunvatta_Yatra_UP_Route_Plan.xlsx` (received 14 Oct 2026)
+### CURRENT: 3-team plan — `data/Gunvatta_Yatra_UP_3Team_Plan.xlsx` (received 2 Nov 2026)
+Supersedes the 4-team route plan below. One sheet, a block per team (columns #, Yatra Date,
+Day, District / Cluster (host venue), Mandal, Dist.); no other planning columns.
+- 56 yatras covering all 75 districts: Grand Launch in Lucknow on WED 4 Nov 2026 (all three
+  teams), then 55 Friday yatras 13 Nov 2026 – 30 Apr 2027, 4–8 PM (Saturday 27 Mar for Good
+  Friday). No yatras 19 Dec 2026 – 4 Jan 2027 (NABH faculty New Year leave).
+- Team 1 (Team A) East UP, lead Pankaj, 18 yatras / 22 districts, starts Gorakhpur 20 Nov.
+  Team 2 (Team B) West UP, lead TBD ("senior person"), 18 / 24, starts Moradabad 13 Nov.
+  Team 3 (Team C) Central UP & Bundelkhand, lead TBD, 19 / 28, starts Kanpur Nagar 20 Nov.
+  Each team has 1 coordinator. Buffer date 30 Apr 2027 for Teams 1 and 2.
+- 14 cluster yatras ("A + B (host: X)"). Up to 3 yatras on one Friday → 3 NABH faculty.
+- `data/plan_extras.json` holds what the planner lacks, adjusted to it: UP holidays, weekly
+  rhythm, notes & risks, "how the plan works" rules. Edit it when those change.
+- The portal derives: team on the ground (Monday of yatra week), holiday caution, travel
+  from previous district + rough km (great-circle +25%), earlier visit (from (VF) baseline).
+
+### SUPERSEDED (2 Nov 2026): 4-team route plan — `data/Gunvatta_Yatra_UP_Route_Plan.xlsx` (received 14 Oct 2026)
 Supersedes the Phase 1/2/3 schedule and `Planned_Yatras_All_Phases.xlsx` below (that file is
 now used only for its hospital figures). Sheets: Summary, UP Holidays, Route Plan, Friday
 Calendar, Route Matrix, Weekly Rhythm, Notes & Risks.
@@ -341,12 +357,12 @@ denominator is canonical is open gating decision #1 above.
   UP" dashboard screenshot. Published at https://claude.ai/artifact/Kk1fGwwPWRPzoBFVBdkEyd.
   Data is embedded by `portal/build_data.py` (4-team route plan + hospital figures + live
   Freshworks + district GeoJSON). See `portal/README.md` for rules and refresh commands.
-- Built on the 4-team route plan (since 14 Oct 2026). Main pages show ONLY the 63 UP GY
-  yatras from the 23 Oct 2026 launch; older yatras and the (VF) baseline appear only on the
+- Built on the 3-team plan (since 2 Nov 2026). Main pages show ONLY the 56 UP GY
+  yatras from the 4 Nov 2026 grand launch; older yatras and the (VF) baseline appear only on the
   separate "Past yatras" tab. CRM events link to planned yatras by district + date (±3 days).
-- Yatra ids: `J-1` for the joint launch, otherwise `<team>-<leg>` (e.g. `T2-C1-L3`).
+- Yatra ids: `L` for the grand launch, otherwise `<team>-<nn>` (e.g. `T2-04`); buffers `<team>-R`.
 - Shared db (artifact `db` capability): `readiness/<yatra id>` with checks letter, list,
   venue, faculty, spoc (Not started / In progress / Done / Not needed; due dates follow the
   weekly rhythm), plus spocName, venueName, facultyName, notes, updatedBy, updatedAt; and
-  `teams/<T1..T4>` with member and base (team member names entered in the portal).
+  `teams/<T1..T3>` with member (lead), coord (coordinator) and base, entered in the portal.
 - Delivery-approach comparison is QCI-internal; the "District CMO" view hides it.
