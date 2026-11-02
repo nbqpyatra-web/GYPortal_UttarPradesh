@@ -330,6 +330,12 @@ denominator is canonical is open gating decision #1 above.
   (format `NABH_<CITY>_<DDMMYY>_Y`). Exclude the undated catch-all `NABH_ADDITIONAL_Y`.
 
 ## 15. Monitoring portal (`portal/`)
+- **Working repo (from 2 Nov 2026): `nbqpyatra-web/GYPortal_UttarPradesh`, deployed on Vercel.**
+  Make all changes here, not in the older `nbqpyatra-web/UP-GY` repo. Push straight to
+  `main` (decided by Rachit, 2 Nov 2026): every push to main redeploys the live Vercel site,
+  so check each change locally (render the page, no console errors, phone width) first.
+- On Vercel the page is a plain static site: the shared Readiness tracker and team-member
+  editing only save on the claude.ai artifact link below; on Vercel they show read-only.
 - `portal/index.html` is a single-file portal modelled on the reference "Gunvatta Yatra –
   UP" dashboard screenshot. Published at https://claude.ai/artifact/Kk1fGwwPWRPzoBFVBdkEyd.
   Data is embedded by `portal/build_data.py` (4-team route plan + hospital figures + live
