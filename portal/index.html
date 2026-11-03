@@ -1029,7 +1029,7 @@ function renderLeads(list) {
 let rShow = store.get('upgy-rshow', 'upcoming');
 const editable = () => trackerMode === 'live' && canWrite !== false;
 function renderTracker(list) {
-  $('#tracker-note').innerHTML = trackerMode === 'off' ? '<b>Shared tracking works in the claude.ai portal on claude.ai.</b> This copy shows the due dates only.'
+  $('#tracker-note').innerHTML = trackerMode === 'off' ? '<b>Readiness can only be updated on the claude.ai version of this portal.</b> This site shows the checks and their due dates, read-only.'
     : trackerMode === 'loading' ? 'Loading the shared tracker…'
     : canWrite === false ? '<b>You have view-only access.</b> Ask the portal owner for Contributor access to update readiness.'
     : '<b>Shared tracker.</b> Due dates follow the plan’s weekly rhythm: CMO letter 30 days before, target list 15, venue and AV 10, NABH faculty 7, and the CMO SPOC by the Monday the team reaches the district. Changes save automatically for everyone.';
